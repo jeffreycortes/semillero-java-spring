@@ -1,14 +1,8 @@
 package com.semillerogtc.gtcusermanagament.controllers;
 
 import com.semillerogtc.gtcusermanagament.common.EnvironmentService;
-import com.semillerogtc.gtcusermanagament.common.beans.EnvironmentConfig;
 import com.semillerogtc.gtcusermanagament.domain.UsuarioDto;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Scope;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.semillerogtc.gtcusermanagament.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +64,7 @@ public class UsersController {
     }
 
     @PatchMapping("/{id}")
-    public boolean actualizarUsuario(@Validated @RequestBody UsuarioDto usuarioDto) {
+    public boolean actualizarUsuario(@RequestBody UsuarioDto usuarioDto) {
         String user = "Jeffrey";
         return _user.registrarUsuario(user);
     }
