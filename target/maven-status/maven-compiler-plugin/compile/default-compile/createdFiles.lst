@@ -1,9 +1,0 @@
-com/semillerogtc/gtcusermanagament/components/UsersValidation.class
-com/semillerogtc/gtcusermanagament/common/ProdEnvironmentService.class
-com/semillerogtc/gtcusermanagament/common/DevEnvironmentService.class
-com/semillerogtc/gtcusermanagament/common/QaEnvironmentService.class
-Usuario.class
-com/semillerogtc/gtcusermanagament/common/EnvironmentService.class
-com/semillerogtc/gtcusermanagament/services/UsersService.class
-com/semillerogtc/gtcusermanagament/GtcusermanagamentApplication.class
-com/semillerogtc/gtcusermanagament/controllers/UsersController.class
