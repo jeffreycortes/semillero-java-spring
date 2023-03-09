@@ -1,8 +1,14 @@
 package com.semillerogtc.gtcusermanagament.controllers;
 
 import com.semillerogtc.gtcusermanagament.common.EnvironmentService;
+import com.semillerogtc.gtcusermanagament.common.beans.EnvironmentConfig;
+import com.semillerogtc.gtcusermanagament.domain.UsuarioDto;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.semillerogtc.gtcusermanagament.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,23 +20,63 @@ import org.slf4j.Logger;
 public class UsersController {
     @Autowired
     UsersService _user;
-    EnvironmentService _environmentService;
+
+
+
+    EnvironmentService _environmentService1;
 
     public final Logger logger = LoggerFactory.getLogger(UsersController.class);
 
-    UsersController(@Qualifier("devEnvironmentService") EnvironmentService environmentService) {
-        _environmentService = environmentService;
-        logger.info("Se incializa constructor");
-        logger.info("Ambiente configurado: " + _environmentService.getEnvironmentName());
+    UsersController() {
     }
 
     @GetMapping("/ping")
-    public String ping() {
+
+    public String ping(
+                @RequestHeader("Environment") String token
+    ) {
+
+        logger.info(token);
         return "Hola desde controlador usuarios";
     }
 
-    @PostMapping()
-    public boolean registrarUsuario() {
+
+    @GetMapping
+    public boolean consultarUsuarioPorHeader(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestHeader("") String userId) {
+        logger.info(token + "- " + userId);
+        String user = "Jeffrey";
+        return _user.registrarUsuario(user);
+    }
+
+    @GetMapping("/query")
+    public boolean consultarUsuarioPorQueryStrings(@RequestParam String email) {
+        logger.info(email);
+        String user = "Jeffrey";
+        return _user.registrarUsuario(user);
+    }
+
+    @GetMapping("/uritemplate/{email}/{id}")
+    public boolean consultarUsuarioPorPathOUriTemplate(@PathVariable("email")  String email, @PathVariable("id")  String userId) {
+        logger.info(email + "- " + userId);
+        String user = "Jeffrey";
+        return _user.registrarUsuario(user);
+    }
+
+    @PostMapping("/{token}")
+    public boolean registrarUsuario(@RequestBody UsuarioDto usuarioDto) {
+        logger.info(usuarioDto.email + "- " + usuarioDto.userId);
+        String user = "Jeffrey";
+        return _user.registrarUsuario(user);
+    }
+
+    @PatchMapping("/{id}")
+    public boolean actualizarUsuario(@Validated @RequestBody UsuarioDto usuarioDto) {
+        String user = "Jeffrey";
+        return _user.registrarUsuario(user);
+    }
+
+   @DeleteMapping
+    public boolean eliminarUsuario() {
         String user = "Jeffrey";
         return _user.registrarUsuario(user);
     }
