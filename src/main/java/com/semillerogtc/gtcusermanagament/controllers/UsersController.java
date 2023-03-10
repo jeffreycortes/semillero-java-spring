@@ -2,12 +2,17 @@ package com.semillerogtc.gtcusermanagament.controllers;
 
 import com.semillerogtc.gtcusermanagament.common.EnvironmentService;
 import com.semillerogtc.gtcusermanagament.domain.UsuarioDto;
+import com.semillerogtc.gtcusermanagament.domain.UsuarioDto2;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.semillerogtc.gtcusermanagament.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -34,7 +39,6 @@ public class UsersController {
         return "Hola desde controlador usuarios";
     }
 
-
     @GetMapping
     public boolean consultarUsuarioPorHeader(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestHeader("") String userId) {
         logger.info(token + "- " + userId);
@@ -43,7 +47,7 @@ public class UsersController {
     }
 
     @GetMapping("/query")
-    public boolean consultarUsuarioPorQueryStrings(@RequestParam String email) {
+    public boolean consultarUsuarioPorQueryString(@RequestParam String email) {
         logger.info(email);
         String user = "Jeffrey";
         return _user.registrarUsuario(user);
@@ -56,11 +60,21 @@ public class UsersController {
         return _user.registrarUsuario(user);
     }
 
-    @PostMapping("/{token}")
-    public boolean registrarUsuario(@RequestBody UsuarioDto usuarioDto) {
+    @PostMapping("v1/{token}")
+    public ResponseEntity registrarUsuario(@PathVariable String input, @Valid @RequestBody UsuarioDto usuarioDto) throws Exception {
         logger.info(usuarioDto.email + "- " + usuarioDto.userId);
-        String user = "Jeffrey";
-        return _user.registrarUsuario(user);
+        var esRegistroExitoso = _user.registrarUsuario(input);
+        if (!esRegistroExitoso)
+            return new ResponseEntity("Falló la creación de usuario", HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return new ResponseEntity("Usuario creado exitosamente", HttpStatus.CREATED);
+    }
+
+    @PostMapping("v2/{token}")
+    public String registrarUsuario2(@Valid @RequestBody UsuarioDto2 usuarioDto) throws Exception {
+        logger.info(usuarioDto.email + "- " + usuarioDto.userId);
+
+        return "Hola desde método post 2";
     }
 
     @PatchMapping("/{id}")
@@ -69,7 +83,7 @@ public class UsersController {
         return _user.registrarUsuario(user);
     }
 
-   @DeleteMapping
+   @DeleteMapping("/{id}")
     public boolean eliminarUsuario() {
         String user = "Jeffrey";
         return _user.registrarUsuario(user);
