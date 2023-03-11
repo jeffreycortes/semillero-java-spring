@@ -1,5 +1,6 @@
-package com.semillerogtc.gtcusermanagament.common;
+package com.semillerogtc.gtcusermanagament.infrastructure.controllers;
 
+import com.semillerogtc.gtcusermanagament.common.EnvironmentService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
