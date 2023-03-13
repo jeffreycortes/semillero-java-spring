@@ -1,11 +1,11 @@
-package com.semillerogtc.gtcusermanagament.infrastructure.controllers;
+package com.semillerogtc.gtcusermanagament.infrastructure.environment;
 
-import com.semillerogtc.gtcusermanagament.common.EnvironmentService;
-import net.bytebuddy.asm.Advice;
+import com.semillerogtc.gtcusermanagament.infrastructure.environment.EnvironmentService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
+@Profile("qa")
 public class QaEnvironmentService implements EnvironmentService {
     @Override
     public String getEnvironmentName() {

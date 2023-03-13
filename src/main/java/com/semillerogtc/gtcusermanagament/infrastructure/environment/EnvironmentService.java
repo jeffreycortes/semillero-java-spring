@@ -1,4 +1,4 @@
-package com.semillerogtc.gtcusermanagament.common;
+package com.semillerogtc.gtcusermanagament.infrastructure.environment;
 
 import org.springframework.beans.factory.annotation.Value;
 
