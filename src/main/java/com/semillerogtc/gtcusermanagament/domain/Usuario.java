@@ -5,23 +5,27 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.print.DocFlavor;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
-@NoArgsConstructor
+@Table(name="usuarios")
 public class Usuario {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
-    private String email;
-    @NotEmpty(message = "El parametro name es obligatorio")
+    @NotEmpty(message = "El nombre es obligatorio")
     private String name;
+    @NotEmpty(message = "El email es obligatorio")
+    private String email;
     private Integer edad;
-    private long celular;
+
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+    Set<Telefonos> telefonos;
 }

@@ -1,8 +1,7 @@
 package com.semillerogtc.gtcusermanagament.infrastructure.controllers;
 
-import com.semillerogtc.gtcusermanagament.common.EnvironmentService;
-import com.semillerogtc.gtcusermanagament.domain.UsuarioDto;
-import com.semillerogtc.gtcusermanagament.domain.UsuarioDto2;
+import com.semillerogtc.gtcusermanagament.domain.UsuarioNuevoDto;
+import com.semillerogtc.gtcusermanagament.infrastructure.environment.EnvironmentService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,47 +41,42 @@ public class UsersController {
     @GetMapping
     public ResponseEntity consultarUsuarioPorHeader(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestHeader("") String userId) {
         logger.info(token + "- " + userId);
-        UsuarioDto user = UsuarioDto.builder().email("Jeffrey").build();
+        UsuarioNuevoDto user = UsuarioNuevoDto.builder().email("Jeffrey").build();
         return new ResponseEntity(_user.registrarUsuario(user), HttpStatus.OK);
     }
 
     @GetMapping("/query")
     public ResponseEntity consultarUsuarioPorQueryString(@RequestParam String email) {
         logger.info(email);
-        UsuarioDto user = UsuarioDto.builder().email("Jeffrey").build();
+        UsuarioNuevoDto user = UsuarioNuevoDto.builder().email("Jeffrey").build();
         return new ResponseEntity(_user.registrarUsuario(user), HttpStatus.OK);
     }
 
     @GetMapping("/uritemplate/{email}/{id}")
     public ResponseEntity consultarUsuarioPorPathOUriTemplate(@PathVariable("email")  String email, @PathVariable("id")  String userId) {
         logger.info(email + "- " + userId);
-        UsuarioDto user = UsuarioDto.builder().email("Jeffrey").build();
+        UsuarioNuevoDto user = UsuarioNuevoDto.builder().email("Jeffrey").build();
         return new ResponseEntity(_user.registrarUsuario(user), HttpStatus.OK);
     }
 
     @PostMapping("v1")
-    public ResponseEntity registrarUsuario(@RequestBody UsuarioDto usuarioDto) throws Exception {
-        logger.info(usuarioDto.email + "- " + usuarioDto.celular);
-        try{
-            var usuarioRegistrado = _user.registrarUsuario(usuarioDto);
+    public ResponseEntity registrarUsuario(@Valid @RequestBody UsuarioNuevoDto usuarioDto) {
+        logger.info(usuarioDto.email);
+        var usuarioRegistrado = _user.registrarUsuario(usuarioDto);
 
-            return new ResponseEntity(usuarioRegistrado, HttpStatus.CREATED);
-        } catch(Exception ex) {
-            return new ResponseEntity("Falló la creación de usuario, Error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
+        return new ResponseEntity(usuarioRegistrado, HttpStatus.CREATED);
     }
 
     @PostMapping("v2/")
-    public ResponseEntity registrarUsuario2(@Valid @RequestBody UsuarioDto usuarioDto) throws Exception {
+    public ResponseEntity registrarUsuario2(@Valid @RequestBody UsuarioNuevoDto usuarioDto) throws Exception {
         var usuarioRegistrado = _user.registrarUsuario(usuarioDto);
 
         return new ResponseEntity(usuarioRegistrado, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity actualizarUsuario(@RequestBody UsuarioDto usuarioDto) {
-        UsuarioDto user = UsuarioDto.builder().email("Jeffrey").build();
+    public ResponseEntity actualizarUsuario(@RequestBody UsuarioNuevoDto usuarioDto) {
+        UsuarioNuevoDto user = UsuarioNuevoDto.builder().email("Jeffrey").build();
         return new ResponseEntity(_user.registrarUsuario(user), HttpStatus.OK);
     }
 
