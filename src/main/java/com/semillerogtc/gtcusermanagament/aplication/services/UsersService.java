@@ -1,16 +1,11 @@
 package com.semillerogtc.gtcusermanagament.aplication.services;
 
 
-import com.semillerogtc.gtcusermanagament.domain.Telefonos;
-import com.semillerogtc.gtcusermanagament.domain.UsuarioNuevoDto;
+import com.semillerogtc.gtcusermanagament.domain.*;
 import org.springframework.stereotype.Service;
-import com.semillerogtc.gtcusermanagament.domain.Usuario;
-import com.semillerogtc.gtcusermanagament.domain.UsuariosRepositorio;
 import com.semillerogtc.gtcusermanagament.domain.components.UsersValidation;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -30,13 +25,13 @@ public class UsersService {
 
         Usuario usuarioNuevo = new Usuario();
         usuarioNuevo.setName(usuarioNuevoDto.nombre);
-        usuarioNuevo.setEmail(usuarioNuevoDto.email);
+        usuarioNuevo.setEmail(new Email(usuarioNuevoDto.email));
         usuarioNuevo.setEdad(usuarioNuevoDto.edad);
 
-        Telefonos telefono1 = new Telefonos();
-        telefono1.setTelefono(usuarioNuevoDto.telefonos.get(0));
-        Set<Telefonos> telefonosSet = new HashSet<Telefonos>();
-        telefonosSet.add(telefono1);
+        UsuarioTelefono usuarioTelefono = new UsuarioTelefono();
+        usuarioTelefono.setTelefono(usuarioNuevoDto.telefonos.get(0));
+        Set<UsuarioTelefono> telefonosSet = new HashSet<UsuarioTelefono>();
+        telefonosSet.add(usuarioTelefono);
 
         usuarioNuevo.setTelefonos(telefonosSet);
 
@@ -48,7 +43,7 @@ public class UsersService {
         this.usuariosRepositorio.deleteById(userId);
     }
 
-    public String consultarUsuario() {
-        return "true";
+    public Usuario consultarUsuarioXEmail(String email) {
+        return this.usuariosRepositorio.findByEmail(new Email(email));
     }
 }

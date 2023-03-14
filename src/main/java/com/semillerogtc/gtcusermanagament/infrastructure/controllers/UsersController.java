@@ -38,7 +38,13 @@ public class UsersController {
         return "Hola desde controlador usuarios";
     }
 
-    @GetMapping
+    @GetMapping("/{email}")
+    public ResponseEntity consultarUsuarioPorEmail( @PathVariable("email") String email) {
+        var usuario = _user.consultarUsuarioXEmail(email);
+        return new ResponseEntity(usuario, HttpStatus.OK);
+    }
+
+    @GetMapping("/headers")
     public ResponseEntity consultarUsuarioPorHeader(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestHeader("") String userId) {
         logger.info(token + "- " + userId);
         UsuarioNuevoDto user = UsuarioNuevoDto.builder().email("Jeffrey").build();

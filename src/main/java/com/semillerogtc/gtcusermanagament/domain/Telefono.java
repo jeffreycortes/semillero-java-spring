@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 public class Telefono {
     private String value;
 
-    private Telefono(String telefono) {
+    public Telefono(String telefono) {
         this.value = telefono;
     }
 
