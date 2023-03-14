@@ -4,15 +4,14 @@ import lombok.Builder;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
+import java.util.List;
 
 @Builder
-public class UsuarioDto {
+public class UsuarioNuevoDto {
     @NotEmpty(message = "Nombre es obligatorio")
     public String nombre;
     @NotEmpty(message = "Email es obligatorio")
     public String email;
     public int edad;
-    public long celular;
-    public Date fechaNacimiento;
-
+    public List<String> telefonos;
 }
