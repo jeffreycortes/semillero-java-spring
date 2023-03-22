@@ -3,7 +3,6 @@ package com.semillerogtc.gtcusermanagament.domain;
 import lombok.Builder;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.Date;
 import java.util.List;
 
 @Builder
