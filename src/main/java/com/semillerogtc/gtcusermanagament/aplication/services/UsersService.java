@@ -2,9 +2,11 @@ package com.semillerogtc.gtcusermanagament.aplication.services;
 
 
 import com.semillerogtc.gtcusermanagament.domain.*;
+import com.semillerogtc.gtcusermanagament.domain.components.PasswordEncoderService;
 import org.springframework.stereotype.Service;
 import com.semillerogtc.gtcusermanagament.domain.components.UsersValidation;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,16 +14,25 @@ import java.util.Set;
 public class UsersService {
     UsersValidation _usersValidation;
     UsuariosRepositorio usuariosRepositorio;
+    PasswordEncoderService _passwordEncoderService;
 
     UsersService(
             UsersValidation usersValidation,
-            UsuariosRepositorio usuariosRepositorio) {
+            UsuariosRepositorio usuariosRepositorio,
+            PasswordEncoderService passwordEncoderService) {
         this.usuariosRepositorio = usuariosRepositorio;
         _usersValidation = usersValidation;
+        this._passwordEncoderService = passwordEncoderService;
     }
 
     public Usuario registrarUsuario(UsuarioNuevoDto usuarioNuevoDto) {
         boolean resultado = _usersValidation.execute(usuarioNuevoDto);
+        var pass = this.generarPassword();
+        var passEncriptado1 = this._passwordEncoderService.encode(pass);
+        var passEncriptado2 = this._passwordEncoderService.encode("otro");
+        var esPasswordIgual = this._passwordEncoderService.validarPassword(pass, passEncriptado1);
+        var esPassword2Igual = this._passwordEncoderService.validarPassword(pass, passEncriptado2);
+        System.out.println(esPasswordIgual);
 
         Usuario usuarioNuevo = new Usuario();
         usuarioNuevo.setName(usuarioNuevoDto.nombre);
@@ -37,6 +48,10 @@ public class UsersService {
 
         var userRegistrado = this.usuariosRepositorio.save(usuarioNuevo);
         return userRegistrado;
+    }
+
+    public String generarPassword() {
+        return "clavesegura";
     }
 
     public void elinminarUsuario(String userId) {

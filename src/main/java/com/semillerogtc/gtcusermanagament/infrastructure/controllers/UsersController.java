@@ -1,7 +1,9 @@
 package com.semillerogtc.gtcusermanagament.infrastructure.controllers;
 
 import com.semillerogtc.gtcusermanagament.domain.UsuarioNuevoDto;
+import com.semillerogtc.gtcusermanagament.domain.components.JWtManagerService;
 import com.semillerogtc.gtcusermanagament.infrastructure.environment.EnvironmentService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +21,13 @@ public class UsersController {
     @Autowired
     UsersService _user;
 
-
-
     EnvironmentService _environmentService1;
+    JWtManagerService jWtManagerService;
 
     public final Logger logger = LoggerFactory.getLogger(UsersController.class);
 
-    UsersController() {
+    UsersController(JWtManagerService jWtManagerService) {
+        this.jWtManagerService = jWtManagerService;
     }
 
     @GetMapping("/ping")
@@ -78,6 +80,21 @@ public class UsersController {
         var usuarioRegistrado = _user.registrarUsuario(usuarioDto);
 
         return new ResponseEntity(usuarioRegistrado, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity login() {
+        return new ResponseEntity(this.jWtManagerService.generate(), HttpStatus.OK);
+    }
+
+    @PostMapping("/auth")
+    public ResponseEntity auth(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        try{
+            var jwt = this.jWtManagerService.validate(token);
+            return new ResponseEntity(jwt.toString(), HttpStatus.OK);
+        }catch (Exception ex){
+            return new ResponseEntity("Token epirado o no válido", HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @PatchMapping("/{id}")
