@@ -3,10 +3,11 @@ package com.semillerogtc.gtcusermanagament.infrastructure.controllers;
 import com.semillerogtc.gtcusermanagament.domain.UsuarioNuevoDto;
 import com.semillerogtc.gtcusermanagament.domain.components.JWtManagerService;
 import com.semillerogtc.gtcusermanagament.infrastructure.environment.EnvironmentService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import com.semillerogtc.gtcusermanagament.aplication.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -75,8 +78,26 @@ public class UsersController {
         return new ResponseEntity(usuarioRegistrado, HttpStatus.CREATED);
     }
 
-    @PostMapping("v2/")
+    @PostMapping("v2")
     public ResponseEntity registrarUsuario2(@Valid @RequestBody UsuarioNuevoDto usuarioDto) throws Exception {
+        var usuarioRegistrado = _user.registrarUsuario(usuarioDto);
+
+        return new ResponseEntity(usuarioRegistrado, HttpStatus.CREATED);
+    }
+
+    @PostMapping("v3")
+    public ResponseEntity registrarUsuario2(@Valid @RequestBody UsuarioNuevoDto usuarioDto, BindingResult bindingResult) throws Exception {
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            List<String> errors = new ArrayList<>();
+
+            for (FieldError fieldError : fieldErrors) {
+                errors.add(fieldError.getField() + ": " + fieldError.getDefaultMessage());
+            }
+
+            return ResponseEntity.badRequest().body(errors);
+        }
+
         var usuarioRegistrado = _user.registrarUsuario(usuarioDto);
 
         return new ResponseEntity(usuarioRegistrado, HttpStatus.CREATED);
